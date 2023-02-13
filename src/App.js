@@ -1,23 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.scss";
+import JSONDATA from "./countries-data.json";
+import logo from "./logo.png";
+
+import { useState } from "react";
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="navbar">
+        <img src={logo} className="logo" />
+        <input
+          className="searchBox"
+          type="text"
+          placeholder="Search..."
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+          }}
+        />
+      </div>
+
+      <div className="country-box">
+        {JSONDATA.filter((value) => {
+          if (searchTerm === "") {
+            return value;
+          } else if (
+            value.country.toLowerCase().includes(searchTerm.toLowerCase())
+          ) {
+            return value;
+          }
+        }).map((value, key) => {
+          return (
+            <div className="country" key={key}>
+              <img src={value.flag_base64} className="flagImage" />
+              <p>{value.country}</p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
